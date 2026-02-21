@@ -1,7 +1,7 @@
 import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { KeyboardTypeOptions, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 interface InputProps {
     label: string;
@@ -10,7 +10,7 @@ interface InputProps {
     placeholder?: string;
     secureTextEntry?: boolean;
     error?: string;
-    keyboardType?: 'default' | 'email-address';
+    keyboardType?: KeyboardTypeOptions;
 }
 
 export default function Input({ label, value, onChangeText, placeholder, secureTextEntry, error, keyboardType }: InputProps) {

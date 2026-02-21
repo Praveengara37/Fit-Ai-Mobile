@@ -6,18 +6,22 @@ import { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 export default function Index() {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, hasProfile, isLoading } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
         if (!isLoading) {
             if (isAuthenticated) {
-                router.replace('/(tabs)');
+                if (hasProfile) {
+                    router.replace('/(tabs)');
+                } else {
+                    router.replace('/profile/setup');
+                }
             } else {
                 router.replace('/login');
             }
         }
-    }, [isLoading, isAuthenticated]);
+    }, [isLoading, isAuthenticated, hasProfile]);
 
     return (
         <View style={styles.container}>

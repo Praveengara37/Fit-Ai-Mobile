@@ -23,11 +23,21 @@ export default function Register() {
             return;
         }
 
+        if (password.length < 6) {
+            Alert.alert('Error', 'Password must be at least 6 characters long');
+            return;
+        }
+
+        if (!/[A-Z]/.test(password)) {
+            Alert.alert('Error', 'Password must contain at least one uppercase letter');
+            return;
+        }
+
         setLoading(true);
         try {
             await register(email, password, fullName);
             await refreshUser();
-            router.replace('/(tabs)');
+            router.replace('/profile/setup');
         } catch (error: any) {
             Alert.alert('Registration Failed', error.response?.data?.error?.message || 'Please try again');
         } finally {

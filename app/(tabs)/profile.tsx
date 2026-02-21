@@ -6,7 +6,7 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Profile() {
-    const { user, logout } = useAuth();
+    const { user, hasProfile, logout } = useAuth();
     const router = useRouter();
 
     const handleLogout = async () => {
@@ -34,7 +34,23 @@ export default function Profile() {
                     <Text style={styles.label}>Email</Text>
                     <Text style={styles.value}>{user?.email}</Text>
                 </View>
-                <Button title="Logout" onPress={handleLogout} />
+
+                <View style={styles.actions}>
+                    {hasProfile ? (
+                        <Button
+                            title="View Full Profile"
+                            onPress={() => router.push('/profile/view')}
+                            style={styles.actionButton}
+                        />
+                    ) : (
+                        <Button
+                            title="Complete Setup"
+                            onPress={() => router.push('/profile/setup')}
+                            style={styles.actionButton}
+                        />
+                    )}
+                    <Button title="Logout" onPress={handleLogout} variant="outline" />
+                </View>
             </View>
         </SafeAreaView>
     );
@@ -53,4 +69,6 @@ const styles = StyleSheet.create({
     },
     label: { fontSize: 12, color: Colors.gray[400], marginBottom: 4 },
     value: { fontSize: 18, color: Colors.foreground, fontWeight: '600' },
+    actions: { marginTop: 'auto', gap: 12 },
+    actionButton: { marginBottom: 12 },
 });

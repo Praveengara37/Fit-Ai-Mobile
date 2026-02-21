@@ -62,7 +62,7 @@ export default function Login() {
                 </View>
 
                 <View style={styles.footer}>
-                    <Text style={styles.footerText}>Don't have an account? </Text>
+                    <Text style={styles.footerText}>Don&apos;t have an account? </Text>
                     <Pressable onPress={() => router.push('/register')}>
                         <Text style={styles.link}>Create one</Text>
                     </Pressable>
