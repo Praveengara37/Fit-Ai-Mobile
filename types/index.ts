@@ -29,3 +29,33 @@ export interface Profile {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface DailySteps {
+    id?: string;
+    date: string;
+    steps: number;
+    distanceKm?: number;
+    caloriesBurned?: number;
+    goalSteps?: number;
+    goalProgress?: number;
+    goalReached?: boolean;
+}
+
+export interface StepsHistory {
+    history: DailySteps[];
+    totalDays: number;
+    totalSteps: number;
+    averageSteps: number;
+}
+
+export interface StepsStats {
+    period: 'week' | 'month' | 'year';
+    totalSteps: number;
+    averageSteps: number;
+    totalDistanceKm: number;
+    totalCalories: number;
+    bestDay: { date: string; steps: number };
+    currentStreak: number;
+    daysWithActivity: number;
+    goalReachedDays: number;
+}
