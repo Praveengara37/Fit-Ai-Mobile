@@ -8,4 +8,5 @@ export const Colors = {
   gray: { 100: '#e5e5e5', 300: '#9ca3af', 400: '#6b7280' },
   error: '#ef4444',
   success: '#22c55e',
+  warning: '#f59e0b',
 };
