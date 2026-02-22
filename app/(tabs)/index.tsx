@@ -1,4 +1,5 @@
 import { useAuth } from '@/components/AuthProvider';
+import NutritionWidget from '@/components/meals/NutritionWidget';
 import GoalCelebration from '@/components/steps/GoalCelebration';
 import MotivationalMessage from '@/components/steps/MotivationalMessage';
 import ProgressRing from '@/components/steps/ProgressRing';
@@ -10,8 +11,9 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { OfflineBar } from '@/components/ui/OfflineBar';
 import { Colors } from '@/constants/Colors';
 import { useStepCounter } from '@/hooks/useStepCounter';
+import { getTodayMeals } from '@/lib/meals';
 import { getTodaySteps } from '@/lib/steps';
-import { DailySteps } from '@/types';
+import { DailyMeals, DailySteps } from '@/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
@@ -25,6 +27,7 @@ export default function Dashboard() {
   const { user, hasProfile } = useAuth();
   const { steps, isPedometerAvailable, lastSyncTime, syncNow } = useStepCounter();
   const [todayData, setTodayData] = useState<DailySteps | null>(null);
+  const [mealData, setMealData] = useState<DailyMeals | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -78,8 +81,12 @@ export default function Dashboard() {
     setLoading(true);
     setError(null);
     try {
-      const data = await getTodaySteps();
-      if (data) setTodayData(data);
+      const [stepsData, mealsData] = await Promise.all([
+        getTodaySteps(),
+        getTodayMeals(),
+      ]);
+      if (stepsData) setTodayData(stepsData);
+      setMealData(mealsData);
     } catch (err: any) {
       setError(err.message || 'Failed to load dashboard data');
     } finally {
@@ -169,11 +176,18 @@ export default function Dashboard() {
           />
         </View>
 
+        {/* Nutrition Widget */}
+        <NutritionWidget
+          totals={mealData?.totals}
+          goals={mealData?.goals}
+          onLogMeal={() => router.push('/meals/log' as any)}
+        />
+
         {/* Navigation Blocks */}
         <View style={styles.navBlock}>
           <Button
-            title="📊 View History"
-            onPress={() => router.push('/steps/history' as any)} // Route directly to steps history screen
+            title="📊 View Step History"
+            onPress={() => router.push('/steps/history' as any)}
           />
         </View>
 

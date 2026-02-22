@@ -29,8 +29,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 const { getProfile } = await import('@/lib/profile');
                 await getProfile();
                 setHasProfile(true);
-            } catch (error) {
-                setHasProfile(false);
+            } catch (error: any) {
+                // Only treat 404 as "no profile" — network errors should not block
+                const status = error?.response?.status;
+                if (status === 404) {
+                    setHasProfile(false);
+                } else {
+                    // Backend unreachable or other error — assume profile exists
+                    // to avoid wrongly redirecting to setup
+                    setHasProfile(true);
+                }
             }
         }
         setIsLoading(false);
@@ -49,8 +57,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const { getProfile } = await import('@/lib/profile');
             await getProfile();
             setHasProfile(true);
-        } catch (error) {
-            setHasProfile(false);
+        } catch (error: any) {
+            const status = error?.response?.status;
+            if (status === 404) {
+                setHasProfile(false);
+            } else {
+                setHasProfile(true);
+            }
         }
     };
 
