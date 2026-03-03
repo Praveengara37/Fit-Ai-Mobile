@@ -1,5 +1,5 @@
 import { useAuth } from '@/components/AuthProvider';
-import Logo from '@/components/ui/Logo';
+import { Logo } from '@/components/ui/Logo';
 import { Colors } from '@/constants/Colors';
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
@@ -25,7 +25,7 @@ export default function Index() {
 
     return (
         <View style={styles.container}>
-            <Logo />
+            <Logo width={180} height={180} />
             <ActivityIndicator size="large" color={Colors.purple} style={styles.loader} />
         </View>
     );

@@ -15,6 +15,8 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="steps" />
           <Stack.Screen name="meals" />
+          <Stack.Screen name="settings" />
+          <Stack.Screen name="profile" />
         </Stack>
       </AuthProvider>
     </SafeAreaProvider>

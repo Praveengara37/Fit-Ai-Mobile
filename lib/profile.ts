@@ -1,5 +1,15 @@
-import { Profile } from '@/types';
+import { Profile, Recommendations } from '@/types';
 import api from './api';
+
+export const getRecommendations = async (): Promise<Recommendations | null> => {
+    try {
+        const response = await api.get('/api/profile/recommendations');
+        return response.data?.data ?? null;
+    } catch (error: any) {
+        console.error('[getRecommendations]', error.response?.data || error.message);
+        throw error;
+    }
+};
 
 export const getProfile = async (): Promise<Profile> => {
     const response = await api.get('/api/profile/me');

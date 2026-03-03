@@ -1,7 +1,7 @@
 import { useAuth } from '@/components/AuthProvider';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import Logo from '@/components/ui/Logo';
+import { Logo } from '@/components/ui/Logo';
 import { Colors } from '@/constants/Colors';
 import { register } from '@/lib/auth';
 import { useRouter } from 'expo-router';
@@ -49,7 +49,9 @@ export default function Register() {
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.content}>
                 <View style={styles.header}>
-                    <Logo />
+                    <View style={styles.logoContainer}>
+                        <Logo width={140} height={140} />
+                    </View>
                     <Text style={styles.title}>Create Account</Text>
                     <Text style={styles.subtitle}>Join FitAI today</Text>
                 </View>
@@ -76,7 +78,8 @@ const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: Colors.background },
     content: { flex: 1, padding: 20, justifyContent: 'center' },
     header: { alignItems: 'center', marginBottom: 40 },
-    title: { fontSize: 32, fontWeight: 'bold', color: Colors.purple, marginTop: 20 },
+    logoContainer: { alignItems: 'center', marginTop: 10, marginBottom: 10 },
+    title: { fontSize: 32, fontWeight: 'bold', color: Colors.purple, marginTop: 10 },
     subtitle: { fontSize: 16, color: Colors.gray[300], marginTop: 8 },
     form: { marginBottom: 20 },
     footer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center' },

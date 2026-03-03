@@ -127,3 +127,57 @@ export interface LogMealData {
     foods: MealFood[];
     notes?: string;
 }
+
+// ── Nutrition Goals Types ──
+
+export interface NutritionGoals {
+    dailyCalories: number;
+    dailyProtein: number;
+    dailyCarbs: number;
+    dailyFat: number;
+}
+
+// ── Recommendations Types ──
+
+export interface Recommendations {
+    bmr: number;
+    tdee: number;
+    recommendedCalories: number;
+    explanation: string;
+    macros: {
+        protein: { grams: number; percentage: number };
+        carbs: { grams: number; percentage: number };
+        fat: { grams: number; percentage: number };
+    };
+}
+
+// ── Meal History Types ──
+
+export interface MealHistoryDay {
+    date: string;
+    meals: Meal[];
+    totals: {
+        calories: number;
+        protein: number;
+        carbs: number;
+        fat: number;
+    };
+}
+
+export interface MealStats {
+    period: 'week' | 'month';
+    totalCalories: number;
+    averageCalories: number;
+    averageProtein: number;
+    averageCarbs: number;
+    averageFat: number;
+    daysTracked: number;
+    daysOnTrack: number;
+    dailyBreakdown: Array<{
+        date: string;
+        calories: number;
+        protein: number;
+        carbs: number;
+        fat: number;
+    }>;
+}

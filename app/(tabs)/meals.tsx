@@ -105,6 +105,30 @@ export default function MealsTab() {
                 {/* Header */}
                 <Text style={styles.pageTitle}>Meals</Text>
 
+                {/* Quick Actions */}
+                <View style={styles.quickRow}>
+                    <Pressable
+                        style={styles.quickBtn}
+                        onPress={() => {
+                            Haptics.selectionAsync();
+                            router.push('/meals/history' as any);
+                        }}
+                    >
+                        <Ionicons name="time-outline" size={16} color={Colors.purple} />
+                        <Text style={styles.quickBtnText}>History</Text>
+                    </Pressable>
+                    <Pressable
+                        style={styles.quickBtn}
+                        onPress={() => {
+                            Haptics.selectionAsync();
+                            router.push('/meals/analytics' as any);
+                        }}
+                    >
+                        <Ionicons name="bar-chart-outline" size={16} color={Colors.purple} />
+                        <Text style={styles.quickBtnText}>Analytics</Text>
+                    </Pressable>
+                </View>
+
                 {/* Date selector */}
                 <View style={styles.dateRow}>
                     <Pressable onPress={() => changeDate(-1)} style={styles.dateArrow}>
@@ -195,5 +219,27 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: Colors.gray[400],
         marginTop: 2,
+    },
+    quickRow: {
+        flexDirection: 'row',
+        gap: 10,
+        marginBottom: 12,
+    },
+    quickBtn: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 6,
+        backgroundColor: Colors.card,
+        borderRadius: 10,
+        paddingVertical: 10,
+        borderWidth: 1,
+        borderColor: Colors.border,
+    },
+    quickBtnText: {
+        color: Colors.purple,
+        fontWeight: '600',
+        fontSize: 13,
     },
 });

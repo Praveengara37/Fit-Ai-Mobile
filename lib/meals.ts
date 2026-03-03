@@ -1,4 +1,4 @@
-import { DailyMeals, Food, LogMealData, Meal, MealFood } from '@/types';
+import { DailyMeals, Food, LogMealData, Meal, MealFood, MealHistoryDay, MealStats } from '@/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from './api';
 
@@ -32,7 +32,8 @@ export async function getMealsForDate(date: string): Promise<DailyMeals | null> 
             params: { startDate: date, endDate: date },
         });
         const data = response.data?.data;
-        // The history endpoint may return differently; normalise
+        // The history endpoint returns { history: [...], periodStats: {...} }
+        if (data?.history && Array.isArray(data.history) && data.history.length > 0) return data.history[0];
         if (data?.meals) return data;
         if (Array.isArray(data) && data.length > 0) return data[0];
         return null;
@@ -145,5 +146,53 @@ export async function processSyncQueue(): Promise<void> {
         await AsyncStorage.setItem(SYNC_QUEUE_KEY, JSON.stringify(failed));
     } catch (error) {
         console.error('[processSyncQueue]', error);
+    }
+}
+
+// ── Meal History & Stats ──
+
+export async function getMealHistory(startDate: string, endDate: string): Promise<MealHistoryDay[]> {
+    try {
+        const response = await api.get('/api/meals/history', {
+            params: { startDate, endDate },
+        });
+        const data = response.data?.data;
+        // Backend returns { history: [...], periodStats: {...} }
+        if (data?.history && Array.isArray(data.history)) return data.history;
+        if (Array.isArray(data)) return data;
+        if (data?.days) return data.days;
+        if (data?.meals) return [data];
+        return [];
+    } catch (error: any) {
+        console.error('[getMealHistory]', error.response?.data || error.message);
+        throw error;
+    }
+}
+
+export async function getMealStats(period: 'week' | 'month'): Promise<MealStats | null> {
+    try {
+        const response = await api.get('/api/meals/stats', {
+            params: { period },
+        });
+        const raw = response.data?.data;
+        if (!raw) return null;
+
+        // Backend returns { period: 'week', stats: { totalCalories, ... } }
+        // Normalize to match our MealStats type
+        const stats = raw.stats ?? raw;
+        return {
+            period: raw.period ?? period,
+            totalCalories: stats.totalCalories ?? 0,
+            averageCalories: stats.averageCalories ?? 0,
+            averageProtein: stats.averageProtein ?? 0,
+            averageCarbs: stats.averageCarbs ?? 0,
+            averageFat: stats.averageFat ?? 0,
+            daysTracked: stats.daysLogged ?? stats.daysTracked ?? 0,
+            daysOnTrack: stats.daysOnTrack ?? 0,
+            dailyBreakdown: stats.dailyBreakdown ?? [],
+        };
+    } catch (error: any) {
+        console.error('[getMealStats]', error.response?.data || error.message);
+        throw error;
     }
 }
