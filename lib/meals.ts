@@ -196,3 +196,43 @@ export async function getMealStats(period: 'week' | 'month'): Promise<MealStats 
         throw error;
     }
 }
+
+// ── Photo Analysis ──
+
+export async function analyzePhoto(uri: string): Promise<PhotoAnalysisResult> {
+    const formData = new FormData();
+
+    formData.append('photo', {
+        uri,
+        type: 'image/jpeg',
+        name: 'meal-photo.jpg',
+    } as any);
+
+    const response = await api.post('/api/meals/analyze-photo', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+
+    return response.data.data;
+}
+
+export async function saveMealFromPhoto(
+    foods: Array<{
+        foodId: string;
+        foodName: string;
+        servingSize: string;
+        calories: number;
+        protein: number;
+        carbs: number;
+        fat: number;
+    }>,
+    mealType: string,
+    date?: string,
+): Promise<void> {
+    await api.post('/api/meals/from-photo', {
+        foods,
+        mealType,
+        date: date || new Date().toISOString().split('T')[0],
+    });
+}

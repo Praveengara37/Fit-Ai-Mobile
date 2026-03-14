@@ -7,6 +7,8 @@ export default function MealsLayout() {
             <Stack.Screen name="[id]" />
             <Stack.Screen name="history" />
             <Stack.Screen name="analytics" />
+            <Stack.Screen name="photo" />
+            <Stack.Screen name="photo-analysis" />
         </Stack>
     );
 }

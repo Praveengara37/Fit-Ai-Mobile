@@ -127,6 +127,16 @@ export default function MealsTab() {
                         <Ionicons name="bar-chart-outline" size={16} color={Colors.purple} />
                         <Text style={styles.quickBtnText}>Analytics</Text>
                     </Pressable>
+                    <Pressable
+                        style={styles.quickBtn}
+                        onPress={() => {
+                            Haptics.selectionAsync();
+                            router.push('/meals/photo' as any);
+                        }}
+                    >
+                        <Ionicons name="camera-outline" size={16} color={Colors.purple} />
+                        <Text style={styles.quickBtnText}>Photo</Text>
+                    </Pressable>
                 </View>
 
                 {/* Date selector */}

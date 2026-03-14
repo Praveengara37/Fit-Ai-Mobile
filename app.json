@@ -34,6 +34,18 @@
     "plugins": [
       "expo-router",
       [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow FitAI to take photos of your meals"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow FitAI to access your photos"
+        }
+      ],
+      [
         "expo-sensors",
         {
           "motionPermission": "Allow FitAI to access your motion sensors to automatically count your steps throughout the day."

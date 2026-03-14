@@ -181,3 +181,45 @@ export interface MealStats {
         fat: number;
     }>;
 }
+
+// ── Photo Analysis Types ──
+
+export interface DetectedFood {
+    detectedName: string;
+    confidence: 'high' | 'medium' | 'low';
+    estimatedNutrition: {
+        calories: number;
+        protein: number;
+        carbs: number;
+        fat: number;
+        servingSize: string;
+    };
+    databaseMatch: {
+        foodId: string;
+        foodName: string;
+        nutrition: {
+            calories: number;
+            protein: number;
+            carbs: number;
+            fat: number;
+            servingSize: string;
+        };
+        matchConfidence: number;
+    } | null;
+    notes?: string;
+}
+
+export interface PhotoAnalysisResult {
+    analysisId: string;
+    detectedFoods: DetectedFood[];
+    totalEstimated: {
+        calories: number;
+        protein: number;
+        carbs: number;
+        fat: number;
+    };
+    overallConfidence: 'high' | 'medium' | 'low';
+    photoQuality: 'good' | 'fair' | 'poor';
+    warnings: string[];
+    disclaimers: string[];
+}
