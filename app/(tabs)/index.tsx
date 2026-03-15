@@ -11,6 +11,7 @@ import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { OfflineBar } from '@/components/ui/OfflineBar';
 import { Colors } from '@/constants/Colors';
 import { useStepCounter } from '@/hooks/useStepCounter';
+import { useHealthSync } from '@/hooks/useHealthSync';
 import { getTodayMeals } from '@/lib/meals';
 import { getTodaySteps } from '@/lib/steps';
 import { DailyMeals, DailySteps } from '@/types';
@@ -26,6 +27,7 @@ const DAILY_GOAL = 10000;
 export default function Dashboard() {
   const { user, hasProfile } = useAuth();
   const { steps, isPedometerAvailable, lastSyncTime, syncNow } = useStepCounter();
+  const { healthSource, syncHealthData } = useHealthSync();
   const [todayData, setTodayData] = useState<DailySteps | null>(null);
   const [mealData, setMealData] = useState<DailyMeals | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -81,6 +83,7 @@ export default function Dashboard() {
     setLoading(true);
     setError(null);
     try {
+      await syncHealthData(); // Sync health platforms first
       const [stepsData, mealsData] = await Promise.all([
         getTodaySteps(),
         getTodayMeals(),
@@ -195,6 +198,13 @@ export default function Dashboard() {
         <Text style={styles.syncText}>
           {formatLastSync(lastSyncTime)}
         </Text>
+        {healthSource !== 'none' && (
+          <Text style={[styles.syncText, { marginTop: 4, color: Colors.purple }]}>
+            Synced from {healthSource === 'apple_health' ? 'Apple Health' : 
+                        healthSource === 'health_connect' ? 'Health Connect' : 
+                        'Device Pedometer'}
+          </Text>
+        )}
 
       </ScrollView>
 
